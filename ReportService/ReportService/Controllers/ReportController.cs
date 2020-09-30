@@ -18,9 +18,12 @@ namespace ReportService.Controllers
         public IActionResult Download(int year, int month)
         {
             var actions = new List<(Action<Employee, Report>, Employee)>();
-            var report = new Report() { S = MonthNameResolver.MonthName.GetName(year, month) };
+            var report = new Report()
+            {
+                S = new DateTime(year, month, 1).ToString("MMMMMM", CultureInfo.CurrentCulture)
+            };
             var connString = "Host=192.168.99.100;Username=postgres;Password=1;Database=employee";
-            
+
 
             var conn = new NpgsqlConnection(connString);
             conn.Open();
@@ -47,14 +50,14 @@ namespace ReportService.Controllers
                 actions.Add((new ReportFormatter(null).NL, new Employee()));
                 actions.Add((new ReportFormatter(null).WL, new Employee()));
                 actions.Add((new ReportFormatter(null).NL, new Employee()));
-                actions.Add((new ReportFormatter(null).WD, new Employee() { Department = depName } ));
-                for (int i = 1; i < emplist.Count(); i ++)
+                actions.Add((new ReportFormatter(null).WD, new Employee() { Department = depName }));
+                for (int i = 1; i < emplist.Count(); i++)
                 {
                     actions.Add((new ReportFormatter(emplist[i]).NL, emplist[i]));
                     actions.Add((new ReportFormatter(emplist[i]).WE, emplist[i]));
                     actions.Add((new ReportFormatter(emplist[i]).WT, emplist[i]));
                     actions.Add((new ReportFormatter(emplist[i]).WS, emplist[i]));
-                }  
+                }
 
             }
             actions.Add((new ReportFormatter(null).NL, null));
