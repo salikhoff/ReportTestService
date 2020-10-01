@@ -31,6 +31,7 @@ namespace ReportService
             services.AddSingleton<IEmployeeCodeService, EmployeeCodeService>();
             services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
             services.AddSingleton<IEmployeeListProvider, EmployeeListProvider>();
+            services.AddSingleton<IReportBuilder, ReportBuilder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
