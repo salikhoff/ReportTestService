@@ -5,14 +5,27 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 using ReportService.Domain;
+using ReportService.Services;
 
 namespace ReportService.Controllers
 {
     [Route("api/[controller]")]
     public class ReportController : Controller
     {
+        IConfiguration configuration;
+        IEmployeeCodeService employeeCodeService;
+        ISalaryService salaryService;
+
+        public ReportController(IConfiguration configuration, IEmployeeCodeService employeeCodeService, ISalaryService salaryService)
+        {
+            this.configuration = configuration;
+            this.employeeCodeService = employeeCodeService;
+            this.salaryService = salaryService;
+        }
+
         [HttpGet]
         [Route("{year}/{month}")]
         public IActionResult Download(int year, int month)
@@ -22,8 +35,7 @@ namespace ReportService.Controllers
             {
                 S = new DateTime(year, month, 1).ToString("MMMMMM", CultureInfo.CurrentCulture)
             };
-            var connString = "Host=192.168.99.100;Username=postgres;Password=1;Database=employee";
-
+            var connString = this.configuration.GetConnectionString("Employees");
 
             var conn = new NpgsqlConnection(connString);
             conn.Open();
@@ -40,8 +52,8 @@ namespace ReportService.Controllers
                 while (reader1.Read())
                 {
                     var emp = new Employee() { Name = reader1.GetString(0), Inn = reader1.GetString(1), Department = reader1.GetString(2) };
-                    emp.BuhCode = EmpCodeResolver.GetCode(emp.Inn).Result;
-                    emp.Salary = emp.Salary();
+                    emp.BuhCode = this.employeeCodeService.GetCode(emp.Inn).Result;
+                    emp.Salary = Convert.ToInt32(this.salaryService.GetSalary(emp.Inn, emp.BuhCode).Result);
                     if (emp.Department != depName)
                         continue;
                     emplist.Add(emp);
