@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ReportService.Domain;
+using ReportService.Repositories;
 using ReportService.Services;
 
 namespace ReportService
@@ -27,6 +29,8 @@ namespace ReportService
             services.AddMvc();
             services.AddSingleton<ISalaryService, SalaryService>();
             services.AddSingleton<IEmployeeCodeService, EmployeeCodeService>();
+            services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
+            services.AddSingleton<IEmployeeListProvider, EmployeeListProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

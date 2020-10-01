@@ -7,6 +7,6 @@ namespace ReportService.Services
 {
     public interface ISalaryService
     {
-        Task<decimal> GetSalary(string inn, string employeeCode);
+        Task<decimal> GetSalaryAsync(string inn, string employeeCode);
     }
 }

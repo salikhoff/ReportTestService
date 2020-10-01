@@ -7,6 +7,6 @@ namespace ReportService.Services
 {
     public interface IEmployeeCodeService
     {
-        Task<string> GetCode(string inn);
+        Task<string> GetCodeAsync(string inn);
     }
 }

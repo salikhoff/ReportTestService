@@ -17,7 +17,7 @@ namespace ReportService.Services
             serviceUrl = configuration.GetValue<string>("Services:SalaryService");
         }
 
-        public async Task<decimal> GetSalary(string inn, string employeeCode)
+        public async Task<decimal> GetSalaryAsync(string inn, string employeeCode)
         {
             using (HttpClient httpClient = new HttpClient())
             {

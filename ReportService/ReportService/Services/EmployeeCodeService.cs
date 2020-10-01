@@ -16,7 +16,7 @@ namespace ReportService.Services
             this.serviceUrl = configuration.GetValue<string>("Services:EmployeeCodeService");
         }
 
-        public async Task<string> GetCode(string inn)
+        public async Task<string> GetCodeAsync(string inn)
         {
             using (HttpClient httpClient = new HttpClient())
             {
